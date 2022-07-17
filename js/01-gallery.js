@@ -30,19 +30,22 @@ function handleImageClick(event) {
     }
     const originalImageURL = event.target.getAttribute("data-source");
 
-    modal = basicLightbox.create(`<img src="${originalImageURL}" width="800" height="600">`)
+    modal = basicLightbox.create(`<img src="${originalImageURL}" width="800" height="600">`, { onClose: () => { return document.removeEventListener("keydown", onEscapeClick); } })
     modal.show()
 
-    // document.addEventListener("keydown", onEscapeClick, {once: true})
     if (modal.visible()) {
-        document.addEventListener("keydown", onEscapeClick)
+        return document.addEventListener("keydown", onEscapeClick)
+    }
+
+    if (modal.close()) {
+        return document.removeEventListener("keydown", onEscapeClick);
     }
 
 }
 
  function onEscapeClick(event) {
-    if (event.code === "Escape") {
+     if (event.code === "Escape") {
         modal.close();
-        return removeEventListener("keydown", onEscapeClick);
+        return document.removeEventListener("keydown", onEscapeClick);
     }
  }
